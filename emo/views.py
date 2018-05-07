@@ -166,7 +166,7 @@ def get_res(request):
 		# 	sum_of_pics = sum([len(usr_data[k]) for k in usr_data])
 		# 	dur = time.time() - start
 		# 	time.sleep(1 / 10)
-		if sum_of_pics < total_img * spp:
+		if sum_of_pics < total_img * spp * 0.9:
 			print(sum_of_pics, usr_data)
 			return HttpResponse(json.dumps({'result': []}))
 			
