@@ -136,8 +136,7 @@ def upload_img(request):
 		# q.save()
 		t = threading.Thread(target=api_call, args=(sess_id, data, label, ), daemon=True)
 		t.start()
-		t.join()
-
+		# t.join()
 
 	return HttpResponse('200')
 
