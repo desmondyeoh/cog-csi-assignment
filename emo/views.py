@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
+from django.db import connections
 from base64 import b64encode
 from emo.models import Session_data
 
@@ -76,6 +77,7 @@ def api_call(sess_id, data, label):
 	q.usr_data = json.dumps(usr_data)
 	q.lock = 0
 	q.save()
+	connections.close_all()
 
 
 # @require_http_methods(["GET", "POST"])
@@ -134,7 +136,7 @@ def upload_img(request):
 		# q.usr_data = json.dumps(usr_data)
 		# q.lock = 0
 		# q.save()
-		while threading.active_count() > 4:
+		while threading.active_count() > 8:
 			time.sleep(1/ 10)
 		t = threading.Thread(target=api_call, args=(sess_id, data, label, ), daemon=True)
 		t.start()
@@ -166,7 +168,7 @@ def get_res(request):
 		# 	sum_of_pics = sum([len(usr_data[k]) for k in usr_data])
 		# 	dur = time.time() - start
 		# 	time.sleep(1 / 10)
-		if sum_of_pics < total_img * spp * 0.9:
+		if sum_of_pics < total_img * spp:
 			print(sum_of_pics, usr_data)
 			return HttpResponse(json.dumps({'result': []}))
 			
@@ -174,7 +176,7 @@ def get_res(request):
 		final_score = {}
 		usr_data
 		for k, v in usr_data.items():
-			final_score[k] = sum(v) / len(v)
+			final_score[k] = sum(v) / max(len(v), 1)
 
 		result = sorted(final_score, key=lambda k: -final_score[k])
 		q.delete()
