@@ -27,7 +27,7 @@ def init_sess(request):
 		total_img[sess_id] = t_img
 
 		print(usr_data)
-		
+
 	return HttpResponse('200')
 
 
@@ -52,17 +52,17 @@ def upload_img(request):
 			, "numResults": 7
 		}
 		try:
-			client = Algorithmia.client("simJoaETq5SHL8t3YIU19pWMfLr1")
-			algo = client.algo('deeplearning/EmotionRecognitionCNNMBP/1.0.1')
-			result = algo.pipe(data).result
-			result = result["results"][0]["emotions"]
-			# result = [{'confidence': 0, 'label': 'Neutral'},
-			# 		  {'confidence': 3e-07, 'label': 'Disgust'},
-			# 		  {'confidence': 0, 'label': 'Surprise'},
-			# 		  {'confidence': 0, 'label': 'Sad'},
-			# 		  {'confidence': 0, 'label': 'Fear'},
-			# 		  {'confidence': 0.9999998, 'label': 'Happy'},
-			# 		  {'confidence': 0, 'label': 'Angry'}]
+			# client = Algorithmia.client("simJoaETq5SHL8t3YIU19pWMfLr1")
+			# algo = client.algo('deeplearning/EmotionRecognitionCNNMBP/1.0.1')
+			# result = algo.pipe(data).result
+			# result = result["results"][0]["emotions"]
+			result = [{'confidence': 0.1, 'label': 'Neutral'},
+					  {'confidence': 0.7, 'label': 'Disgust'},
+					  {'confidence': 0, 'label': 'Surprise'},
+					  {'confidence': 0, 'label': 'Sad'},
+					  {'confidence': 0, 'label': 'Fear'},
+					  {'confidence': 0, 'label': 'Happy'},
+					  {'confidence': 0, 'label': 'Angry'}]
 			print('Food {}'.format(label))
 			print('\n'.join(['{}'.format(str(k)) for k in result]))
 
@@ -76,7 +76,7 @@ def upload_img(request):
 					  {'confidence': 0, 'label': 'Angry'}]
 		
 		score = cal_score(result)
-
+		print(usr_data)
 		if not label in usr_data[sess_id].keys():
 			usr_data[sess_id][label] = [score]
 		else:
