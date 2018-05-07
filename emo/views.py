@@ -5,11 +5,8 @@ from django.views.decorators.csrf import csrf_exempt
 from base64 import b64encode
 
 import Algorithmia
-import datetime
 import json
-import random
 import time
-r = random.random
 
 usr_data = {}
 total_img = {}
