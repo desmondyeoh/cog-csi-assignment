@@ -15,7 +15,7 @@ spp = 1
 # @require_http_methods(["GET", "POST"])
 @csrf_exempt
 def init_sess(request):
-	# global usr_data, spp
+	global usr_data, spp
 
 	if request.body:
 		js = json.loads(request.body)
@@ -34,12 +34,10 @@ def init_sess(request):
 # @require_http_methods(["GET", "POST"])
 @csrf_exempt
 def upload_img(request):
-	# global usr_data, spp
+	global usr_data, spp
 	
 	if request.body:
-		print(usr_data)
-
-		return HttpResponse('200')
+		
 		js = json.loads(request.body)
 		
 		sess_id = js['ses']
@@ -65,8 +63,8 @@ def upload_img(request):
 					  {'confidence': 0, 'label': 'Fear'},
 					  {'confidence': 0, 'label': 'Happy'},
 					  {'confidence': 0, 'label': 'Angry'}]
-			# print('Food {}'.format(label))
-			# print('\n'.join(['{}'.format(str(k)) for k in result]))
+			print('Food {}'.format(label))
+			print('\n'.join(['{}'.format(str(k)) for k in result]))
 
 		except:
 			result = [{'confidence': 0, 'label': 'Neutral'},
@@ -88,13 +86,10 @@ def upload_img(request):
 
 @csrf_exempt
 def get_res(request):
-	# global usr_data
+	global usr_data, spp
 
 	if request.body:
-		usr_data
-		print(usr_data)
-		return HttpResponse('200')
-
+		
 		sess_id = json.loads(request.body)['id']
 
 		while len(usr_data[sess_id]) < total_img[sess_id]:
