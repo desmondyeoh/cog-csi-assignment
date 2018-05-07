@@ -5,7 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from base64 import b64encode
 
 import Algorithmia
-import json
+import json	
 import time
 
 usr_data = {}
@@ -25,6 +25,8 @@ def init_sess(request):
 
 		usr_data[sess_id] = {}
 		total_img[sess_id] = t_img
+
+		print(usr_data)
 		
 	return HttpResponse('200')
 
@@ -103,6 +105,7 @@ def get_res(request):
 
 		result = sorted(final_score, key=lambda k: -final_score[k])
 		print(result, usr_data[sess_id])
+		usr_data[sess_id] = None
 		return HttpResponse(json.dumps({'result': result}))
 
 	return HttpResponse('200')
