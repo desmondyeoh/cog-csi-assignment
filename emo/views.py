@@ -8,18 +8,21 @@ import Algorithmia
 import json	
 import time
 
-global usr_data
+usr_data = 0
 total_img = {}
 spp = 1
 
 # @require_http_methods(["GET", "POST"])
 @csrf_exempt
 def init_sess(request):
-	global usr_data, spp
 
 	if request.body:
-		usr_data = {}
-		# return HttpResponse('200')
+		
+		global usr_data, spp
+
+		usr_data = 0
+		
+		return HttpResponse('200')
 		js = json.loads(request.body)
 		sess_id = js['id']
 		spp = js['ss']
@@ -36,13 +39,15 @@ def init_sess(request):
 # @require_http_methods(["GET", "POST"])
 @csrf_exempt
 def upload_img(request):
-	global usr_data, spp
 	
 	if request.body:
+		
+		global usr_data, spp
+
 		js = json.loads(request.body)
 		
 		sess_id = js['ses']
-		print(sess_id, usr_data)
+		usr_data += 1
 		return HttpResponse('200')
 
 		img = js['img']
@@ -89,10 +94,13 @@ def upload_img(request):
 
 @csrf_exempt
 def get_res(request):
-	global usr_data, spp
 
 	if request.body:
+		
+		global usr_data, spp
+
 		print(usr_data)
+		
 		return HttpResponse('200')
 		sess_id = json.loads(request.body)['id']
 
