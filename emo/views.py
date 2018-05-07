@@ -38,6 +38,9 @@ def upload_img(request):
 	
 	if request.body:
 		
+		print(usr_data)
+
+		return HttpResponse('200')
 		js = json.loads(request.body)
 		
 		sess_id = js['ses']
@@ -63,8 +66,8 @@ def upload_img(request):
 					  {'confidence': 0, 'label': 'Fear'},
 					  {'confidence': 0, 'label': 'Happy'},
 					  {'confidence': 0, 'label': 'Angry'}]
-			print('Food {}'.format(label))
-			print('\n'.join(['{}'.format(str(k)) for k in result]))
+			# print('Food {}'.format(label))
+			# print('\n'.join(['{}'.format(str(k)) for k in result]))
 
 		except:
 			result = [{'confidence': 0, 'label': 'Neutral'},
@@ -76,7 +79,6 @@ def upload_img(request):
 					  {'confidence': 0, 'label': 'Angry'}]
 		
 		score = cal_score(result)
-		print(usr_data)
 		if not label in usr_data[sess_id].keys():
 			usr_data[sess_id][label] = [score]
 		else:
@@ -90,6 +92,9 @@ def get_res(request):
 	global usr_data
 
 	if request.body:
+
+		print(usr_data)
+		return HttpResponse('200')
 
 		sess_id = json.loads(request.body)['id']
 
