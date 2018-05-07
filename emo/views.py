@@ -134,7 +134,7 @@ def upload_img(request):
 		# q.usr_data = json.dumps(usr_data)
 		# q.lock = 0
 		# q.save()
-		while threading.active_count() > 8:
+		while threading.active_count() > 4:
 			time.sleep(1/ 10)
 		t = threading.Thread(target=api_call, args=(sess_id, data, label, ), daemon=True)
 		t.start()
