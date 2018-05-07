@@ -18,6 +18,8 @@ def init_sess(request):
 	global usr_data, spp
 
 	if request.body:
+		usr_data = 0
+		return HttpResponse('200')
 		js = json.loads(request.body)
 		sess_id = js['id']
 		spp = js['ss']
@@ -37,7 +39,8 @@ def upload_img(request):
 	global usr_data, spp
 	
 	if request.body:
-		
+		usr_data += 1
+		return HttpResponse('200')
 		js = json.loads(request.body)
 		
 		sess_id = js['ses']
@@ -89,7 +92,8 @@ def get_res(request):
 	global usr_data, spp
 
 	if request.body:
-		
+		print(usr_data)
+		return HttpResponse('200')
 		sess_id = json.loads(request.body)['id']
 
 		while len(usr_data[sess_id]) < total_img[sess_id]:
