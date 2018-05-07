@@ -1,1 +1,1 @@
-web: gunicorn emoEat.wsgi
+web: gunicorn emoEat.wsgi --timeout 600
