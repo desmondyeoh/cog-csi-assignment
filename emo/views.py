@@ -37,7 +37,6 @@ def upload_img(request):
 	# global usr_data, spp
 	
 	if request.body:
-		usr_data['a'] = {}
 		print(usr_data)
 
 		return HttpResponse('200')
