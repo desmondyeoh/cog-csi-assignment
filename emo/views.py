@@ -124,13 +124,15 @@ def get_res(request):
 		sum_of_pics = sum([len(usr_data[k]) for k in usr_data])
 		start = time.time()
 		dur = 0
-		while sum_of_pics < total_img * spp and dur < 30:
+		while sum_of_pics < total_img * spp and dur < 25:
 			q = Session_data.objects.get(pk=sess_id)
 			
 			usr_data = json.loads(q.usr_data)
 			sum_of_pics = sum([len(usr_data[k]) for k in usr_data])
 			dur = time.time() - start
 			time.sleep(1 / 10)
+		if dur >= 25:
+			return HttpResponse(json.dumps({'result': []}))
 			
 	
 		final_score = {}
