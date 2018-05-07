@@ -122,12 +122,14 @@ def get_res(request):
 		spp = q.spp
 			
 		sum_of_pics = sum([len(usr_data[k]) for k in usr_data])
-		while sum_of_pics < total_img * spp:
+		start = time.time()
+		dur = 0
+		while sum_of_pics < total_img * spp and dur < 30:
 			q = Session_data.objects.get(pk=sess_id)
 			
 			usr_data = json.loads(q.usr_data)
 			sum_of_pics = sum([len(usr_data[k]) for k in usr_data])
-
+			dur = time.time() - start
 			time.sleep(1 / 10)
 			
 	
