@@ -6,3 +6,4 @@ class Session_data(models.Model):
 	usr_data = models.TextField()
 	total_img = models.IntegerField()
 	spp = models.IntegerField()
+	lock = models.IntegerField()

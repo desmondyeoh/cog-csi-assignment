@@ -27,7 +27,8 @@ def init_sess(request):
 				session_id = sess_id,
 				usr_data = usr_data,
 				total_img = total_img,
-				spp = spp
+				spp = spp,
+				lock = 0
 			)
 		q.save()
 
@@ -45,11 +46,22 @@ def upload_img(request):
 		sess_id = js['ses']
 
 		q = Session_data.objects.get(pk=sess_id)
+		while q.lock:
+			time.sleep(1 / 10)
+		q.lock = 1
+		q.save()
+
 		usr_data = json.loads(q.usr_data)
 		spp = q.spp
-
 		img = js['img']
 		label = str(js['lbl'] // spp)
+		if not label in usr_data.keys():
+			usr_data[label] = []
+		q.usr_data = json.dumps(usr_data)
+		q.lock = 0
+		q.save()
+		
+
 
 		data = { 
 			  "image": img
@@ -81,12 +93,16 @@ def upload_img(request):
 		
 		score = cal_score(result)
 
-		if not label in usr_data.keys():
-			usr_data[label] = [score]
-		else:
-			usr_data[label].append(score)
 		
+		q = Session_data.objects.get(pk=sess_id)
+		while q.lock:
+			time.sleep(1 / 10)
+		q.lock = 1
+		q.save()
+		usr_data = json.loads(q.usr_data)
+		usr_data[label].append(score)
 		q.usr_data = json.dumps(usr_data)
+		q.lock = 0
 		q.save()
 
 	return HttpResponse('200')
@@ -105,12 +121,25 @@ def get_res(request):
 		total_img = q.total_img
 		spp = q.spp
 
-		q.delete()
 		
 		while len(usr_data) < total_img:
+			q = Session_data.objects.get(pk=sess_id)
+		
+			usr_data = json.loads(q.usr_data)
+			total_img = q.total_img
+			spp = q.spp
+
 			time.sleep(1 / 10)
+			
 		while len(usr_data[str(total_img - 1)]) < spp:
+			q = Session_data.objects.get(pk=sess_id)
+		
+			usr_data = json.loads(q.usr_data)
+			total_img = q.total_img
+			spp = q.spp
+
 			time.sleep(1 / 10)
+			
 	
 		final_score = {}
 		usr_data
@@ -118,7 +147,8 @@ def get_res(request):
 			final_score[k] = sum(v) / len(v)
 
 		result = sorted(final_score, key=lambda k: -final_score[k])
-		print(result)
+		q.delete()
+		print(result, Session_data.objects.all())
 		return HttpResponse(json.dumps({'result': result}))
 
 	return HttpResponse('200')
