@@ -8,7 +8,7 @@ import Algorithmia
 import json	
 import time
 
-usr_data = {}
+global usr_data
 total_img = {}
 spp = 1
 
@@ -18,8 +18,8 @@ def init_sess(request):
 	global usr_data, spp
 
 	if request.body:
-		usr_data = 0
-		return HttpResponse('200')
+		usr_data = {}
+		# return HttpResponse('200')
 		js = json.loads(request.body)
 		sess_id = js['id']
 		spp = js['ss']
@@ -39,11 +39,11 @@ def upload_img(request):
 	global usr_data, spp
 	
 	if request.body:
-		usr_data += 1
-		return HttpResponse('200')
 		js = json.loads(request.body)
 		
 		sess_id = js['ses']
+		print(sess_id, usr_data)
+		return HttpResponse('200')
 
 		img = js['img']
 		# print(img[:10], img[-10:])
