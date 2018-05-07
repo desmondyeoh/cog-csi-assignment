@@ -15,7 +15,7 @@ spp = 1
 # @require_http_methods(["GET", "POST"])
 @csrf_exempt
 def init_sess(request):
-	global usr_data, spp
+	# global usr_data, spp
 
 	if request.body:
 		js = json.loads(request.body)
@@ -34,7 +34,7 @@ def init_sess(request):
 # @require_http_methods(["GET", "POST"])
 @csrf_exempt
 def upload_img(request):
-	global usr_data, spp
+	# global usr_data, spp
 	
 	if request.body:
 		
@@ -89,10 +89,10 @@ def upload_img(request):
 
 @csrf_exempt
 def get_res(request):
-	global usr_data
+	# global usr_data
 
 	if request.body:
-
+		usr_data
 		print(usr_data)
 		return HttpResponse('200')
 
