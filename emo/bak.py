@@ -9,27 +9,30 @@ import Algorithmia
 import json	
 import time
 
+usr_data = 0
+total_img = {}
+spp = 1
 
 # @require_http_methods(["GET", "POST"])
 @csrf_exempt
 def init_sess(request):
 
 	if request.body:
-
-		usr_data = json.dumps({})
 		
+		global usr_data, spp
+
+		usr_data = {}
+		
+		return HttpResponse('200')
 		js = json.loads(request.body)
 		sess_id = js['id']
 		spp = js['ss']
-		total_img = js['tt']
+		t_img = js['tt']
 
-		q = Session_data(
-				session_id = sess_id,
-				usr_data = usr_data,
-				total_img = total_img,
-				spp = spp
-			)
-		q.save()
+		# usr_data[sess_id] = {}
+		# total_img[sess_id] = t_img
+
+		print(usr_data)
 
 	return HttpResponse('200')
 
@@ -39,34 +42,36 @@ def init_sess(request):
 def upload_img(request):
 	
 	if request.body:
+		
+		global usr_data, spp
 
 		js = json.loads(request.body)
 		
 		sess_id = js['ses']
-
-		q = Session_data.objects.get(pk=sess_id)
-		usr_data = json.loads(q.usr_data)
-		spp = q.spp
+		usr_data += 1
+		return HttpResponse('200')
 
 		img = js['img']
-		label = str(js['lbl'] // spp)
+		# print(img[:10], img[-10:])
+		# return HttpResponse('200')
+		label = js['lbl'] // spp
 
 		data = { 
 			  "image": img
 			, "numResults": 7
 		}
 		try:
-			client = Algorithmia.client("simJoaETq5SHL8t3YIU19pWMfLr1")
-			algo = client.algo('deeplearning/EmotionRecognitionCNNMBP/1.0.1')
-			result = algo.pipe(data).result
-			result = result["results"][0]["emotions"]
-			# result = [{'confidence': 0.1, 'label': 'Neutral'},
-			# 		  {'confidence': 0.7, 'label': 'Disgust'},
-			# 		  {'confidence': 0, 'label': 'Surprise'},
-			# 		  {'confidence': 0, 'label': 'Sad'},
-			# 		  {'confidence': 0, 'label': 'Fear'},
-			# 		  {'confidence': 0, 'label': 'Happy'},
-			# 		  {'confidence': 0, 'label': 'Angry'}]
+			# client = Algorithmia.client("simJoaETq5SHL8t3YIU19pWMfLr1")
+			# algo = client.algo('deeplearning/EmotionRecognitionCNNMBP/1.0.1')
+			# result = algo.pipe(data).result
+			# result = result["results"][0]["emotions"]
+			result = [{'confidence': 0.1, 'label': 'Neutral'},
+					  {'confidence': 0.7, 'label': 'Disgust'},
+					  {'confidence': 0, 'label': 'Surprise'},
+					  {'confidence': 0, 'label': 'Sad'},
+					  {'confidence': 0, 'label': 'Fear'},
+					  {'confidence': 0, 'label': 'Happy'},
+					  {'confidence': 0, 'label': 'Angry'}]
 			print('Food {}'.format(label))
 			print('\n'.join(['{}'.format(str(k)) for k in result]))
 
@@ -80,14 +85,10 @@ def upload_img(request):
 					  {'confidence': 0, 'label': 'Angry'}]
 		
 		score = cal_score(result)
-
-		if not label in usr_data.keys():
-			usr_data[label] = [score]
+		if not label in usr_data[sess_id].keys():
+			usr_data[sess_id][label] = [score]
 		else:
-			usr_data[label].append(score)
-		
-		q.usr_data = json.dumps(usr_data)
-		q.save()
+			usr_data[sess_id][label].append(score)
 
 	return HttpResponse('200')
 
@@ -97,28 +98,26 @@ def get_res(request):
 
 	if request.body:
 		
-		sess_id = json.loads(request.body)['id']
-		
-		q = Session_data.objects.get(pk=sess_id)
-		
-		usr_data = json.loads(q.usr_data)
-		total_img = q.total_img
-		spp = q.spp
+		global usr_data, spp
 
-		q.delete()
+		print(usr_data)
 		
-		while len(usr_data) < total_img:
+		return HttpResponse('200')
+		sess_id = json.loads(request.body)['id']
+
+		while len(usr_data[sess_id]) < total_img[sess_id]:
 			time.sleep(1 / 10)
-		while len(usr_data[str(total_img - 1)]) < spp:
+		while len(usr_data[sess_id][total_img[sess_id] - 1]) < spp:
 			time.sleep(1 / 10)
-	
+
 		final_score = {}
 		usr_data
-		for k, v in usr_data.items():
+		for k, v in usr_data[sess_id].items():
 			final_score[k] = sum(v) / len(v)
 
 		result = sorted(final_score, key=lambda k: -final_score[k])
-		print(result)
+		print(result, usr_data[sess_id])
+		usr_data[sess_id] = None
 		return HttpResponse(json.dumps({'result': result}))
 
 	return HttpResponse('200')
