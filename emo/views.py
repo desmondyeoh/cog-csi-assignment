@@ -35,6 +35,18 @@ def init_sess(request):
 			)
 		q.save()
 
+		try:
+			data = { 
+				  "image": open('emo/tst_img.txt', 'r').read()
+				, "numResults": 7
+			}
+			client = Algorithmia.client("simJoaETq5SHL8t3YIU19pWMfLr1")
+			algo = client.algo('deeplearning/EmotionRecognitionCNNMBP/1.0.1')
+			result = algo.pipe(data).result
+			print('test success')
+		except:
+			print('test failed')
+
 	return HttpResponse('200')
 
 
@@ -98,49 +110,9 @@ def upload_img(request):
 			  "image": img
 			, "numResults": 7
 		}
-		# try:
-		# 	client = Algorithmia.client("simJoaETq5SHL8t3YIU19pWMfLr1")
-		# 	algo = client.algo('deeplearning/EmotionRecognitionCNNMBP/1.0.1')
-		# 	result = algo.pipe(data).result
-		# 	result = result["results"][0]["emotions"]
-		# 	# result = [{'confidence': 0.1, 'label': 'Neutral'},
-		# 	# 		  {'confidence': 0.7, 'label': 'Disgust'},
-		# 	# 		  {'confidence': 0, 'label': 'Surprise'},
-		# 	# 		  {'confidence': 0, 'label': 'Sad'},
-		# 	# 		  {'confidence': 0, 'label': 'Fear'},
-		# 	# 		  {'confidence': 0, 'label': 'Happy'},
-		# 	# 		  {'confidence': 0, 'label': 'Angry'}]
-		# 	print('Food {}'.format(label))
-		# 	print('\n'.join(['{}'.format(str(k)) for k in result]))
-
-		# except:
-		# 	result = [{'confidence': 0, 'label': 'Neutral'},
-		# 			  {'confidence': 0, 'label': 'Disgust'},
-		# 			  {'confidence': 0, 'label': 'Surprise'},
-		# 			  {'confidence': 0, 'label': 'Sad'},
-		# 			  {'confidence': 0, 'label': 'Fear'},
-		# 			  {'confidence': 0, 'label': 'Happy'},
-		# 			  {'confidence': 0, 'label': 'Angry'}]
 		
-		# score = cal_score(result)
-
-		
-		# q = Session_data.objects.get(pk=sess_id)
-		# while q.lock:
-		# 	q = Session_data.objects.get(pk=sess_id)
-		# 	time.sleep(1 / 10)
-		# q.lock = 1
-		# q.save()
-		# usr_data = json.loads(q.usr_data)
-		# usr_data[label].append(score)
-		# q.usr_data = json.dumps(usr_data)
-		# q.lock = 0
-		# q.save()
-		# while threading.active_count() > 8:
-		# 	time.sleep(1/ 10)
 		t = threading.Thread(target=api_call, args=(sess_id, data, label, ), daemon=True)
 		t.start()
-		# t.join()
 
 	return HttpResponse('200')
 
@@ -179,8 +151,8 @@ def get_res(request):
 			final_score[k] = sum(v) / max(len(v), 1)
 
 		result = sorted(final_score, key=lambda k: -final_score[k])
-		q.delete()
-		print(result, Session_data.objects.all())
+		
+		print(result)
 		return HttpResponse(json.dumps({'result': result}))
 
 	return HttpResponse('200')
