@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>emoEat</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+	<link rel="stylesheet" href="{% static "emo/static/index.css" %}">
+	<script src="https://code.jquery.com/jquery-3.1.0.min.js" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+	<script src="{% static "emo/static/bootstrap3-typeahead.js" %}"></script>
+	<script src="{% static "emo/static/webcam.js" %}"></script>
+	<script>
+		var static_url = "{{request.scheme}}://{{request.get_host}}{% get_static_prefix %}" + "emo/static/";
+		// var static_url = "{% static 'img' %}"
+		// var static_url = "http://localhost:8000/static/emo/static/"
+		console.log("STATIC URL:" + static_url)
+	</script>
+	<script src="{% static "emo/static/index.js" %}"></script>
+
+</head>
+<body>
+	<div class="container">
+		<center class="mt-5">
+			<img src="{% static "emo/static/um-logo.png" %}" height=100>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<img src="{% static "emo/static/fsktm-logo.jpg" %}" height=100>
+		</center>
+
+		<center>
+			<h1 class="mt-1">emoEat</h1>
+			<div id="my-camera">Loading Webcam...</div>
+
+			<div id="scn1">
+				<button class="btn btn-primary" id="ready-btn">I'm Ready, Let's rock it!</button>
+			</div>
+
+			<div id="scn2">
+				<div id="waiting-init">LOADINGGG.........please wait.....:D</div>
+				<br>
+				<img id="food-img"></img>
+
+			</div>
+
+			<div id="scn3">
+				<h3 id="results-text">Results are loading!</h3>
+
+				<div id="loading-thing">
+					<svg width="50%" height="50%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="lds-ripple"><circle cx="50" cy="50" r="34.5878" fill="none" ng-attr-stroke="{{config.c1}}" ng-attr-stroke-width="{{config.width}}" stroke="#93dbe9" stroke-width="2"><animate attributeName="r" calcMode="spline" values="0;40" keyTimes="0;1" dur="1" keySplines="0 0.2 0.8 1" begin="-0.5s" repeatCount="indefinite"></animate><animate attributeName="opacity" calcMode="spline" values="1;0" keyTimes="0;1" dur="1" keySplines="0.2 0 0.8 1" begin="-0.5s" repeatCount="indefinite"></animate></circle><circle cx="50" cy="50" r="15.5634" fill="none" ng-attr-stroke="{{config.c2}}" ng-attr-stroke-width="{{config.width}}" stroke="#689cc5" stroke-width="2"><animate attributeName="r" calcMode="spline" values="0;40" keyTimes="0;1" dur="1" keySplines="0 0.2 0.8 1" begin="0s" repeatCount="indefinite"></animate><animate attributeName="opacity" calcMode="spline" values="1;0" keyTimes="0;1" dur="1" keySplines="0.2 0 0.8 1" begin="0s" repeatCount="indefinite"></animate></circle></svg>
+				</div>
+
+				<div id="done-loading">
+					<h3>Snapshots!</h3>
+					<div id="results">Loading...</div>
+					<div>
+						<br>
+						<h3>Your Choices!</h3>
+						<ol id="api-results">Loading...</ol>
+					</div>
+
+					<a href="https://goo.gl/forms/Ad0EbGKGsypWS6O32">PLEASE HELP US FILL THIS GOOGLE FORM! Link to Google Form!</a>
+				</div>
+
+			</div>
+		</center>
+
+	</div>
+</body>
+</html>

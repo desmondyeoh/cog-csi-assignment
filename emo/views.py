@@ -12,6 +12,9 @@ import time
 import threading
 
 
+def index(request):
+	return render(request, 'emo/templates/index.html')
+
 # @require_http_methods(["GET", "POST"])
 @csrf_exempt
 def init_sess(request):

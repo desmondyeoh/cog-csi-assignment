@@ -1,0 +1,39 @@
+.city-recommend {
+	color: gray;
+}
+.rating {
+  unicode-bidi: bidi-override;
+  direction: rtl;
+}
+.rating > span {
+  display: inline-block;
+  position: relative;
+  width: 1.1em;
+}
+.rating > span:hover:before,
+.rating > span:hover ~ span:before {
+   content: "\2605";
+   position: absolute;
+}
+#food-img {
+	max-width:600px;
+	max-height:400px;
+}
+#my-camera {
+	position: fixed;
+	bottom: 5px;
+	right: 5px;
+}
+#results img {
+	max-width:100px;
+	max-height:100px;
+}
+
+#api-results img {
+	max-width:250px;
+	max-height:250px;
+}
+
+#api-results {
+	text-align: center;
+}
