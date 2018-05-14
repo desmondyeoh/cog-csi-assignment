@@ -18,7 +18,7 @@ def init_sess(request):
 
 	if request.body:
 
-		[ k.delete() for k in Session_data.objects.all() ]
+		# [ k.delete() for k in Session_data.objects.all() ]
 
 		js = json.loads(request.body)
 		sess_id = js['id']
