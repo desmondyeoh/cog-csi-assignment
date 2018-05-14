@@ -11,6 +11,8 @@ import json
 import time
 import threading
 
+def ssl(request):
+	return HttpResponse('PVvfKwSeozsLTafSnIYC2U6RSsWGBcikZUBgZBfoUIQ.1T_Mio5tm0txTgh34nALLU6GcRkxAQ2E8GHrFLisWEQ')
 
 def index(request):
 	return render(request, 'emo/templates/index.html')
