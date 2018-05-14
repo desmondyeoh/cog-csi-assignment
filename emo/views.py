@@ -46,7 +46,7 @@ def init_sess(request):
 				  "image": open('emo/tst_img.txt', 'r').read()
 				, "numResults": 7
 			}
-			client = Algorithmia.client("simJoaETq5SHL8t3YIU19pWMfLr1")
+			client = Algorithmia.client("sim2Va+Ug0bYOz38n3C88wg+kzz1")
 			algo = client.algo('deeplearning/EmotionRecognitionCNNMBP/1.0.1')
 			result = algo.pipe(data).result
 			print('test success')
@@ -58,7 +58,7 @@ def init_sess(request):
 
 def api_call(sess_id, data, label):
 	try:
-		client = Algorithmia.client("simJoaETq5SHL8t3YIU19pWMfLr1")
+		client = Algorithmia.client("sim2Va+Ug0bYOz38n3C88wg+kzz1")
 		algo = client.algo('deeplearning/EmotionRecognitionCNNMBP/1.0.1')
 		result = algo.pipe(data).result
 		result = result["results"][0]["emotions"]
