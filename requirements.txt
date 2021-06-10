@@ -2,7 +2,7 @@ algorithmia==1.0.8
 certifi==2018.4.16
 chardet==3.0.4
 dj-database-url==0.5.0
-Django==2.0.5
+Django==2.2.24
 django-heroku==0.3.1
 enum34==1.1.6
 idna==2.6
